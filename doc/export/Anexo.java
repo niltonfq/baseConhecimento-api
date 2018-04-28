@@ -1,4 +1,5 @@
 import java.String;
+import java.Date;
 
 public class Anexo {
 
@@ -7,6 +8,10 @@ public class Anexo {
 	private String nome;
 
 	private String caminho;
+
+	private Date dataCriacao;
+
+	private Date dataAtualizacao;
 
 	private Topico topico;
 

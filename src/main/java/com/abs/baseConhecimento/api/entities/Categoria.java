@@ -1,6 +1,7 @@
 package com.abs.baseConhecimento.api.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -19,18 +22,19 @@ public class Categoria implements Serializable{
 
 	private long id;
 	private String nome;
+	private Categoria parent;
+	private List<Categoria> subs = new ArrayList<>();
 	private Date dataCriacao;
 	private Date dataAtualizacao;
-	
-	private List<CategoriaSubCategoria> subCategorias;
 
 	public Categoria() {
 	}
 
-	public Categoria(long id, String nome) {
+	public Categoria(long id, String nome, Categoria parent) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.parent = parent;
 	}
 
 	@Id
@@ -43,15 +47,6 @@ public class Categoria implements Serializable{
 		this.id = id;
 	}
 
-	@OneToMany(mappedBy="id.categoriaSub")
-	public List<CategoriaSubCategoria> getSubCategorias() {
-		return subCategorias;
-	}
-
-	public void setSubCategorias(List<CategoriaSubCategoria> subCategorias) {
-		this.subCategorias = subCategorias;
-	}
-
 	@Column(nullable=false)
 	public String getNome() {
 		return nome;
@@ -61,6 +56,25 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 	
+	@ManyToOne
+    @JoinColumn(name = "parent")
+	public Categoria getParent() {
+		return parent;
+	}
+
+	public void setParent(Categoria parent) {
+		this.parent = parent;
+	}
+
+	@OneToMany(mappedBy = "parent")
+	public List<Categoria> getSubs() {
+		return subs;
+	}
+
+	public void setSubs(List<Categoria> subs) {
+		this.subs = subs;
+	}
+
 	@Column(nullable=false)
 	public Date getDataCriacao() {
 		return dataCriacao;

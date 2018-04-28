@@ -1,10 +1,15 @@
-import java.String;
+import java.Clob;
+import java.Date;
 
 public class Informacao {
 
 	private long id;
 
-	private String descricao;
+	private Clob descricao;
+
+	private Date dataCriacao;
+
+	private Date dataAtualizacao;
 
 	private Topico topico;
 

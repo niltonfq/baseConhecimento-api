@@ -2,11 +2,7 @@ package com.abs.baseConhecimento.api.services.impl;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.abs.baseConhecimento.api.entities.Categoria;
@@ -17,20 +13,27 @@ import com.abs.baseConhecimento.api.services.CategoriaService;
 @Service
 public class CategoriaServiceImpl implements CategoriaService{
 
-	private static final Logger log = LoggerFactory.getLogger(CategoriaServiceImpl.class);
+	//private static final Logger log = LoggerFactory.getLogger(CategoriaServiceImpl.class);
 
 	@Autowired
 	private CategoriaRepository repo;
 
 	@Override
-	public List<Categoria> listCategoriasPai() {
-		log.info("Listando categorias pais");
-		return repo.listCategoriasPai();
+	public List<Categoria> list() {
+		List<Categoria> lista = repo.findByParentIsNull();
+		for (Categoria categoria : lista) {
+			carregaSubs(categoria);
+		}
+		return lista;
 	}
 
-	@Override
-	public Page<Categoria> list(PageRequest pageRequest) {
-		return repo.findAll(pageRequest);
+	private void carregaSubs(Categoria pai) {
+		
+		pai.setSubs(repo.findByParent(pai));
+		
+		for (Categoria filho : pai.getSubs()) {
+			carregaSubs(filho);
+		}
 	}
 	
 	
