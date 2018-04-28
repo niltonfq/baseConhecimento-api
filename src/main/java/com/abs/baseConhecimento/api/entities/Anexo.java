@@ -25,6 +25,7 @@ public class Anexo implements Serializable{
 	}
 
 	public Anexo(long id, String nome, String caminho, Date dataCriacao, Date dataAtualizacao) {
+		super();
 		this.id = id;
 		this.nome = nome;
 		this.caminho = caminho;
@@ -33,7 +34,7 @@ public class Anexo implements Serializable{
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}

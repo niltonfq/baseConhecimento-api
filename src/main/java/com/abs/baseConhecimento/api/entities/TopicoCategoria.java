@@ -16,8 +16,10 @@ public class TopicoCategoria implements Serializable{
 	public TopicoCategoria() {
 	}
 
-	public TopicoCategoria(TopicoCategoriaPK id) {
-		this.id = id;
+	public TopicoCategoria(Topico topico, Categoria categoria) {
+		super();
+		this.id.setTopico(topico);
+		this.id.setCategoria(categoria);
 	}
 
 	@JsonIgnore

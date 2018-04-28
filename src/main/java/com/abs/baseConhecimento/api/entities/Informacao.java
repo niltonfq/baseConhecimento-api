@@ -26,12 +26,13 @@ public class Informacao implements Serializable{
 	}
 
 	public Informacao(long id, Clob descricao) {
+		super();
 		this.id = id;
 		this.descricao = descricao;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}

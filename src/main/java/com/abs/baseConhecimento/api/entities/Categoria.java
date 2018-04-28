@@ -24,12 +24,13 @@ public class Categoria implements Serializable{
 	}
 
 	public Categoria(long id, String nome) {
+		super();
 		this.id = id;
 		this.nome = nome;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}

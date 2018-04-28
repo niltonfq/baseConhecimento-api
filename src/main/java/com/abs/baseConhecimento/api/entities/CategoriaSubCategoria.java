@@ -16,8 +16,10 @@ public class CategoriaSubCategoria implements Serializable{
 	public CategoriaSubCategoria() {
 	}
 
-	public CategoriaSubCategoria(CategoriaSubCategoriaPK id) {
-		this.id = id;
+	public CategoriaSubCategoria(Categoria categoria, Categoria categoriaSub) {
+		super();
+		this.id.setCategoria(categoria);
+		this.id.setCategoriaSub(categoriaSub);
 	}
 
 	@JsonIgnore

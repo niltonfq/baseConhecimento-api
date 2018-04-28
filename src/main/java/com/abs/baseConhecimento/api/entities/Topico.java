@@ -25,12 +25,13 @@ public class Topico implements Serializable{
 	}
 
 	public Topico(long id, String nome) {
+		super();
 		this.id = id;
 		this.nome = nome;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}
