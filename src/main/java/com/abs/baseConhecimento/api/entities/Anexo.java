@@ -8,8 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Anexo implements Serializable{
@@ -18,17 +22,19 @@ public class Anexo implements Serializable{
 	private long id;
 	private String nome;
 	private String caminho;
+	private Topico topico;
 	private Date dataCriacao;
 	private Date dataAtualizacao;
 	
 	public Anexo() {
 	}
 
-	public Anexo(long id, String nome, String caminho, Date dataCriacao, Date dataAtualizacao) {
+	public Anexo(long id, String nome, String caminho, Topico topico, Date dataCriacao, Date dataAtualizacao) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.caminho = caminho;
+		this.topico = topico;
 		this.dataCriacao = dataCriacao;
 		this.dataAtualizacao = dataAtualizacao;
 	}
@@ -79,6 +85,17 @@ public class Anexo implements Serializable{
 		this.dataAtualizacao = dataAtualizacao;
 	}
 	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="topico_id")
+	public Topico getTopico() {
+		return topico;
+	}
+
+	public void setTopico(Topico topico) {
+		this.topico = topico;
+	}
+	
 	@PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();
@@ -122,6 +139,8 @@ public class Anexo implements Serializable{
 		builder.append(nome);
 		builder.append(", caminho=");
 		builder.append(caminho);
+		builder.append(", topico=");
+		builder.append(topico);
 		builder.append(", dataCriacao=");
 		builder.append(dataCriacao);
 		builder.append(", dataAtualizacao=");
@@ -129,5 +148,5 @@ public class Anexo implements Serializable{
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

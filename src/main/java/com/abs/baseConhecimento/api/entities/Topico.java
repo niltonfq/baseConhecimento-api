@@ -1,13 +1,16 @@
 package com.abs.baseConhecimento.api.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
@@ -19,6 +22,9 @@ public class Topico implements Serializable{
 	private String nome;
 	private Date dataCriacao;
 	private Date dataAtualizacao;
+
+	private List<Informacao> informacoes = new ArrayList<>();
+	private List<Anexo> anexos = new ArrayList<>();
 	
 	public Topico() {
 		
@@ -67,6 +73,24 @@ public class Topico implements Serializable{
 		this.dataAtualizacao = dataAtualizacao;
 	}
 	
+	@OneToMany(mappedBy="topico")
+	public List<Informacao> getInformacoes() {
+		return informacoes;
+	}
+
+	public void setInformacoes(List<Informacao> informacoes) {
+		this.informacoes = informacoes;
+	}
+
+	@OneToMany(mappedBy="topico")
+	public List<Anexo> getAnexos() {
+		return anexos;
+	}
+
+	public void setAnexos(List<Anexo> anexos) {
+		this.anexos = anexos;
+	}
+
 	@PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();
