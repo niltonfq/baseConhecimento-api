@@ -29,14 +29,12 @@ public class Anexo implements Serializable{
 	public Anexo() {
 	}
 
-	public Anexo(long id, String nome, String caminho, Topico topico, Date dataCriacao, Date dataAtualizacao) {
+	public Anexo(long id, String nome, String caminho, Topico topico) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.caminho = caminho;
 		this.topico = topico;
-		this.dataCriacao = dataCriacao;
-		this.dataAtualizacao = dataAtualizacao;
 	}
 
 	@Id
