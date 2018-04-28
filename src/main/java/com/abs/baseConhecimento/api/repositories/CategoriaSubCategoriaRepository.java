@@ -6,4 +6,5 @@ import com.abs.baseConhecimento.api.entities.CategoriaSubCategoria;
 
 public interface CategoriaSubCategoriaRepository extends JpaRepository<CategoriaSubCategoria, Long> {
 
+	
 }
