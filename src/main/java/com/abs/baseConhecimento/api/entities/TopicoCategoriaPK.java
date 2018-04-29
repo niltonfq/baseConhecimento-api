@@ -15,6 +15,7 @@ public class TopicoCategoriaPK implements Serializable{
 	private Categoria categoria;
 	private Topico topico;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="topico_id")
 	public Topico getTopico() {

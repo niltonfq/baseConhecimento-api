@@ -24,6 +24,7 @@ public class Categoria implements Serializable{
 	private String nome;
 	private Categoria parent;
 	private List<Categoria> subs = new ArrayList<>();
+	private List<TopicoCategoria> topicoCategoriaList = new ArrayList<>();
 	private Date dataCriacao;
 	private Date dataAtualizacao;
 
@@ -73,6 +74,15 @@ public class Categoria implements Serializable{
 
 	public void setSubs(List<Categoria> subs) {
 		this.subs = subs;
+	}
+
+	@OneToMany(mappedBy = "id.categoria")
+	public List<TopicoCategoria> getTopicoCategoriaList() {
+		return topicoCategoriaList;
+	}
+
+	public void setTopicoCategoriaList(List<TopicoCategoria> topicoCategoriaList) {
+		this.topicoCategoriaList = topicoCategoriaList;
 	}
 
 	@Column(nullable=false)

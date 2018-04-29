@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
+import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
 
 
@@ -17,6 +18,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Autowired
 	private CategoriaRepository repo;
+	@Autowired
+	private TopicoCategoriaRepository topicoCategoriaRepository;
 
 	@Override
 	public List<Categoria> list() {
@@ -30,7 +33,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private void carregaSubs(Categoria pai) {
 		
 		pai.setSubs(repo.findByParent(pai));
-		
+		pai.setTopicoCategoriaList(topicoCategoriaRepository.findByIdCategoria(pai));
 		for (Categoria filho : pai.getSubs()) {
 			carregaSubs(filho);
 		}
