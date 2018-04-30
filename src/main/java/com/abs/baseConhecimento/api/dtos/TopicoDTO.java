@@ -1,8 +1,6 @@
 package com.abs.baseConhecimento.api.dtos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TopicoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -10,15 +8,12 @@ public class TopicoDTO implements Serializable{
 	private long id;
 	private String nome;
 	
-	private List<InformacaoDTO> informacoes = new ArrayList<>();
-
 	public TopicoDTO() {
 	}
 	
-	public TopicoDTO(long id, String nome, List<InformacaoDTO> informacoes) {
+	public TopicoDTO(long id, String nome) {
 		this.id = id;
 		this.nome = nome;
-		this.informacoes = informacoes;
 	}
 
 
@@ -37,14 +32,6 @@ public class TopicoDTO implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public List<InformacaoDTO> getInformacoes() {
-		return informacoes;
-	}
-
-	public void setInformacoes(List<InformacaoDTO> informacoes) {
-		this.informacoes = informacoes;
 	}
 
 }

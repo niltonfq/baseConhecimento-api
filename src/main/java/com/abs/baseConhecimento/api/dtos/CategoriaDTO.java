@@ -33,7 +33,7 @@ public class CategoriaDTO implements Serializable{
 		
 		for (TopicoCategoria topicoCategoria : topicoCategoriaList) {
 			TopicoDTO obj = new TopicoDTO(topicoCategoria.getId().getTopico().getId(), 
-					topicoCategoria.getId().getTopico().getNome(), null);
+					topicoCategoria.getId().getTopico().getNome());
 			dto.getTopicos().add(obj);
 		}
 		
