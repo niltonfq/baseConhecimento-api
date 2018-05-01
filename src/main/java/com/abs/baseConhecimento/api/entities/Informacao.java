@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Informacao implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String descricao;
 	private Date dataCriacao;
 	private Date dataAtualizacao;
@@ -29,7 +29,7 @@ public class Informacao implements Serializable{
 		
 	}
 
-	public Informacao(long id, String descricao, Topico topico) {
+	public Informacao(Long id, String descricao, Topico topico) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -38,11 +38,11 @@ public class Informacao implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

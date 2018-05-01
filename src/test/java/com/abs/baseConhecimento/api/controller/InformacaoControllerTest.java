@@ -58,8 +58,8 @@ public class InformacaoControllerTest {
 
 	private List<Informacao> dados() {
 		List<Informacao> lista = new ArrayList<>();
-		lista.add(new Informacao(1, "primeira descricao", null));
-		lista.add(new Informacao(2, "segunda descricao", null));
+		lista.add(new Informacao(1L, "primeira descricao", null));
+		lista.add(new Informacao(2L, "segunda descricao", null));
 		return lista;
 	}
 }

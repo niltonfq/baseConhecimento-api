@@ -19,8 +19,8 @@ import javax.persistence.PreUpdate;
 @Entity
 public class Categoria implements Serializable{
 	private static final long serialVersionUID = 1L;
-
-	private long id;
+	
+	private Long id;
 	private String nome;
 	private Categoria parent;
 	private List<Categoria> subs = new ArrayList<>();
@@ -31,7 +31,7 @@ public class Categoria implements Serializable{
 	public Categoria() {
 	}
 
-	public Categoria(long id, String nome, Categoria parent) {
+	public Categoria(Long id, String nome, Categoria parent) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -40,11 +40,11 @@ public class Categoria implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

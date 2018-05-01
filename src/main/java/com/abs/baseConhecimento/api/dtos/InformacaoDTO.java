@@ -5,22 +5,22 @@ import java.io.Serializable;
 public class InformacaoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String descricao;
 	
 	public InformacaoDTO() {
 	}
 
-	public InformacaoDTO(long id, String descricao) {
+	public InformacaoDTO(Long id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

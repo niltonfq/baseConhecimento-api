@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Anexo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String nome;
 	private String caminho;
 	private Topico topico;
@@ -29,7 +29,7 @@ public class Anexo implements Serializable{
 	public Anexo() {
 	}
 
-	public Anexo(long id, String nome, String caminho, Topico topico) {
+	public Anexo(Long id, String nome, String caminho, Topico topico) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -39,11 +39,11 @@ public class Anexo implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

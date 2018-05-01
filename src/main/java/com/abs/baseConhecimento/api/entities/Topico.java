@@ -18,7 +18,7 @@ import javax.persistence.PreUpdate;
 public class Topico implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String nome;
 	private Date dataCriacao;
 	private Date dataAtualizacao;
@@ -30,7 +30,7 @@ public class Topico implements Serializable{
 		
 	}
 
-	public Topico(long id, String nome) {
+	public Topico(Long id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -38,11 +38,11 @@ public class Topico implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

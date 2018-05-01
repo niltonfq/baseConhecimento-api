@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +18,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.BindingResult;
 
+import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.services.CategoriaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RunWith(SpringRunner.class)
@@ -56,10 +61,33 @@ public class CategoriaControllerTest {
 		.andExpect(status().isBadRequest());
 	}
 
+	@Test
+	public void testCadastrarCategoria() throws Exception {
+		
+		BDDMockito.given(this.categoriaService.fromDto(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
+			.willReturn(new Categoria(1L, "nome", null));
+		BDDMockito.given(this.categoriaService.toDto(Mockito.any(Categoria.class)))
+			.willReturn(new CategoriaDTO(1L, "nome"));
+		BDDMockito.given(this.categoriaService.save(Mockito.any(Categoria.class)))
+			.willReturn(new Categoria(1L, "nome", null));
+		
+		mvc.perform(MockMvcRequestBuilders.post(URL)
+				.content(this.obterJsonRequisicaoPost())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+	}
+	
 	private List<Categoria> dados() {
 		List<Categoria> lista = new ArrayList<>();
-		lista.add(new Categoria(1, "nome", null));
-		lista.add(new Categoria(2, "nome2", null));
+		lista.add(new Categoria(1L, "nome", null));
+		lista.add(new Categoria(2L, "nome2", null));
 		return lista;
+	}
+	
+	private String obterJsonRequisicaoPost() throws JsonProcessingException {
+		CategoriaDTO dto = new CategoriaDTO(1L, "nomedto");
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(dto);
 	}
 }

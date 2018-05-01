@@ -11,8 +11,9 @@ import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 public class CategoriaDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String nome;
+	private Long pai;
 	
 	private List<CategoriaDTO> itens = new ArrayList<>();
 	private List<TopicoDTO> topicos = new ArrayList<>();
@@ -21,7 +22,7 @@ public class CategoriaDTO implements Serializable{
 		
 	}
 	
-	public CategoriaDTO(long id, String nome) {
+	public CategoriaDTO(Long id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}
@@ -29,6 +30,9 @@ public class CategoriaDTO implements Serializable{
 	public CategoriaDTO(Categoria obj) {
 		this.id = obj.getId();
 		this.nome = obj.getNome();
+		if(obj.getParent() != null) {
+			this.pai = obj.getParent().getId();
+		}
 		
 		adicionarTopicos(this, obj.getTopicoCategoriaList());
 		adicionarItens(this, obj.getSubs());
@@ -51,10 +55,10 @@ public class CategoriaDTO implements Serializable{
 		}
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNome() {
@@ -78,6 +82,14 @@ public class CategoriaDTO implements Serializable{
 
 	public void setTopicos(List<TopicoDTO> topicos) {
 		this.topicos = topicos;
+	}
+
+	public Long getPai() {
+		return pai;
+	}
+
+	public void setPai(Long pai) {
+		this.pai = pai;
 	}
 	
 }
