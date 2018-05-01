@@ -67,6 +67,11 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public CategoriaDTO toDto(Categoria categoria) {
 		return new CategoriaDTO(categoria);
 	}
+
+	@Override
+	public Optional<Categoria> buscarPorId(Long id) {
+		return repo.findById(id);
+	}
 	
 	
 }

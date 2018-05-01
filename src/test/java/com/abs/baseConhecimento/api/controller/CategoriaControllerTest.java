@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,19 @@ public class CategoriaControllerTest {
 				.andExpect(status().isOk());
 	}
 
+	@Test
+	public void testListarPorId() throws Exception {
+		BDDMockito.given(this.categoriaService.buscarPorId(Mockito.anyLong()))
+			.willReturn(Optional.of(new Categoria(1L, "nome", null)));
+		
+		BDDMockito.given(this.categoriaService.toDto(Mockito.any(Categoria.class)))
+		.willReturn(new CategoriaDTO(1L, "nome"));
+		
+		mvc.perform(MockMvcRequestBuilders.get(URL+"/1")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
 	@Test
 	public void testListSemCategoriasPai() throws Exception {
 		BDDMockito.given(this.categoriaService.list())

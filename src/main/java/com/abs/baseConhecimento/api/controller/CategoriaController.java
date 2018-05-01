@@ -3,6 +3,7 @@ package com.abs.baseConhecimento.api.controller;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ import com.abs.baseConhecimento.api.response.Response;
 import com.abs.baseConhecimento.api.services.CategoriaService;
 
 
+
 @RestController
 @RequestMapping("/api/categorias")
 @CrossOrigin(origins = "*")
@@ -35,6 +38,28 @@ public class CategoriaController {
 	
 	@Autowired
 	private CategoriaService categoriaService;
+	
+	/**
+	 * Retorna uma categoria por ID.
+	 * 
+	 * @param id
+	 * @return ResponseEntity<Response<CategoriaDTO>>
+	 */
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Response<CategoriaDTO>> listarPorId(@PathVariable("id") Long id) {
+		log.info("Buscando categoria por ID: {}", id);
+		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
+		Optional<Categoria> categoria = this.categoriaService.buscarPorId(id);
+
+		if (!categoria.isPresent()) {
+			log.info("Categoria não encontrada para o ID: {}", id);
+			response.getErrors().add("Categoria não encontrada para o id " + id);
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		response.setData(this.categoriaService.toDto(categoria.get()));
+		return ResponseEntity.ok(response);
+	}
 	
 	/**
 	 * Retorna a listagem de categorias e seus tópicos existentes.

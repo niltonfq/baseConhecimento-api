@@ -1,6 +1,7 @@
 package com.abs.baseConhecimento.api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.validation.BindingResult;
 
@@ -15,6 +16,7 @@ public interface CategoriaService {
 
 	CategoriaDTO toDto(Categoria categoria);
 	Categoria fromDto(CategoriaDTO categoriaDTO, BindingResult result);
-	
+
+	Optional<Categoria> buscarPorId(Long id);
 	
 }
