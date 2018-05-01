@@ -28,6 +28,12 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	/**
+	 * Retorna a listagem de categorias e seus tópicos existentes.
+	 * 
+	 * @param none
+	 * @return ResponseEntity<Response<List<CategoriaDTO>>>
+	 */
 	@GetMapping
 	public ResponseEntity<Response<List<CategoriaDTO>>> listar() {
 		
