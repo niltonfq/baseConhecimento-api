@@ -20,6 +20,11 @@ public class CategoriaDTO implements Serializable{
 	public CategoriaDTO() {
 		
 	}
+	
+	public CategoriaDTO(long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
 
 	public CategoriaDTO(Categoria obj) {
 		this.id = obj.getId();

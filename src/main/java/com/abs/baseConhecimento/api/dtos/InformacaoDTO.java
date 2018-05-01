@@ -11,6 +11,11 @@ public class InformacaoDTO implements Serializable{
 	public InformacaoDTO() {
 	}
 
+	public InformacaoDTO(long id, String descricao) {
+		this.id = id;
+		this.descricao = descricao;
+	}
+
 	public long getId() {
 		return id;
 	}
