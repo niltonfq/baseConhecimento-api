@@ -92,6 +92,23 @@ public class CategoriaControllerTest {
 				.andExpect(status().isCreated());
 	}
 	
+	@Test
+	public void testAlterarCategoria() throws Exception {
+		
+		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
+			.willReturn(new Categoria(1L, "nome"));
+		BDDMockito.given(this.categoriaService.fromCategoriaToDto(Mockito.any(Categoria.class)))
+			.willReturn(new CategoriaDTO(1L, "nome"));
+		BDDMockito.given(this.categoriaService.update(Mockito.any(Categoria.class)))
+			.willReturn(new Categoria(1L, "nome"));
+		
+		mvc.perform(MockMvcRequestBuilders.put(URL+"/1")
+				.content(this.obterJsonRequisicaoPost())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
 	private List<Categoria> dados() {
 		List<Categoria> lista = new ArrayList<>();
 		lista.add(new Categoria(1L, "nome"));
