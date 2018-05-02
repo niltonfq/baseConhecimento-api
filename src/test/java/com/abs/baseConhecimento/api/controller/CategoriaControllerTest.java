@@ -109,6 +109,17 @@ public class CategoriaControllerTest {
 				.andExpect(status().isOk());
 	}
 	
+	@Test
+	public void testExcluirCategoria() throws Exception {
+		
+		BDDMockito.given(this.categoriaService.find(Mockito.anyLong()))
+			.willReturn(Optional.of(new Categoria(0L, "nome")));
+		
+		mvc.perform(MockMvcRequestBuilders.delete(URL+"/1")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
 	private List<Categoria> dados() {
 		List<Categoria> lista = new ArrayList<>();
 		lista.add(new Categoria(1L, "nome"));

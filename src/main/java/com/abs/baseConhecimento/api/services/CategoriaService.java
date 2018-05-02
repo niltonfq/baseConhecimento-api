@@ -18,6 +18,7 @@ public interface CategoriaService {
 	CategoriaDTO fromCategoriaToDto(Categoria categoria);
 	CategoriaDTO fromCategoriaToDtoComSubsComTopicos(Categoria categoria);
 	Categoria fromDtoToCategoria(CategoriaDTO categoriaDTO, BindingResult result);
+	void delete(Long id);
 
 
 	

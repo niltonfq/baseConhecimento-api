@@ -118,4 +118,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 		newObj.setParent(obj.getParent());
 	}
 
+	@Override
+	public void delete(Long id) {
+		repo.deleteById(id);
+	}
+
 }

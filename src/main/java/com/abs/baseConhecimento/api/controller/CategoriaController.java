@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,28 @@ public class CategoriaController {
 	private CategoriaService categoriaService;
 	
 	/**
+	 * Remove um categoria por ID.
+	 * 
+	 * @param id
+	 * @return ResponseEntity<Response<Categoria>>
+	 */
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
+		log.info("Removendo categoria: {}", id);
+		Response<String> response = new Response<String>();
+		Optional<Categoria> categoria = this.categoriaService.find(id);
+
+		if (!categoria.isPresent()) {
+			log.info("Erro ao remover devido ao categoria ID: {} ser inválido.", id);
+			response.getErrors().add("Erro ao remover categoria. Registro não encontrado para o id " + id);
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		this.categoriaService.delete(id);
+		return ResponseEntity.ok(new Response<String>());
+	}
+	
+	/**
 	 * Atualiza os dados de uma categoria.
 	 * 
 	 * @param id
@@ -53,7 +76,7 @@ public class CategoriaController {
 		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
 		
 		Categoria categoria = this.categoriaService.fromDtoToCategoria(categoriaDTO, result);
-		log.info("Atualizando lançamento: {}", categoria.toString());
+		log.info("Atualizando categoria: {}", categoria.toString());
 		categoria.setId(id);
 		if (result.hasErrors()) {
 			log.error("Erro validando categoria: {}", result.getAllErrors());
