@@ -6,10 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
+import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
+import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
@@ -44,34 +45,77 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	@Override
-	public Categoria fromDto(CategoriaDTO categoriaDTO, BindingResult result) {
-
-		Categoria cat = new Categoria(null, categoriaDTO.getNome(), null);
-		
-		if(categoriaDTO.getPai() != null) {
-			Optional<Categoria> parent = repo.findById(categoriaDTO.getPai());
-			if (!parent.isPresent()) {
-				result.addError(new ObjectError("Categoria Pai", "Categoria pai não encontrada:"+categoriaDTO.getPai()));
-			}
-			cat.setParent(parent.get());
-		}
-		return cat;
-	}
-
-	@Override
 	public Categoria save(Categoria categoria) {
 		return repo.save(categoria);
 	}
 
 	@Override
-	public CategoriaDTO toDto(Categoria categoria) {
-		return new CategoriaDTO(categoria);
-	}
-
-	@Override
-	public Optional<Categoria> buscarPorId(Long id) {
+	public Optional<Categoria> find(Long id) {
 		return repo.findById(id);
 	}
 	
+	@Override
+	public Categoria update(Categoria obj) {
+		Optional<Categoria> newObj = find(obj.getId());
+		if(newObj == null) {
+			return null;
+		}
+		updateData(newObj.get(), obj);
+		return repo.save(newObj.get());
+	}
+
+	@Override
+	public CategoriaDTO fromCategoriaToDto(Categoria obj) {
+		CategoriaDTO dto = new CategoriaDTO(obj.getId(), obj.getNome());		
+		if(obj.getParent() != null) {
+			dto.setPai(obj.getParent().getId());
+		}
+		return dto;
+	}
 	
+	@Override
+	public CategoriaDTO fromCategoriaToDtoComSubsComTopicos(Categoria obj) {
+		CategoriaDTO dto = fromCategoriaToDto(obj);
+		adicionarTopicos(dto, obj.getTopicoCategoriaList());
+		adicionarItens(dto, obj.getSubs());
+		return dto;
+	}
+	
+
+	private void adicionarTopicos(CategoriaDTO dto, List<TopicoCategoria> topicoCategoriaList) {
+		
+		for (TopicoCategoria topicoCategoria : topicoCategoriaList) {
+			TopicoDTO obj = new TopicoDTO(topicoCategoria.getId().getTopico().getId(), 
+					topicoCategoria.getId().getTopico().getNome());
+			dto.getTopicos().add(obj);
+		}
+		
+	}
+
+	private void adicionarItens(CategoriaDTO dto, List<Categoria> lista) {
+		for (Categoria categoria : lista) {
+			CategoriaDTO obj = fromCategoriaToDto(categoria);
+			adicionarItens(obj, categoria.getSubs());
+			adicionarTopicos(obj, categoria.getTopicoCategoriaList());
+			dto.getItens().add(obj);
+		}
+	}
+	
+	
+	@Override
+	public Categoria fromDtoToCategoria(CategoriaDTO dto, BindingResult result) {
+		
+		Categoria cat = new Categoria(dto.getId(), dto.getNome());
+		if(dto.getPai() != null) {
+			cat.setParent(new Categoria(dto.getPai(), ""));
+		}
+
+		return cat;
+	}
+	
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+		newObj.setParent(obj.getParent());
+	}
+
 }

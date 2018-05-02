@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abs.baseConhecimento.api.entities.Categoria;
-import com.abs.baseConhecimento.api.entities.TopicoCategoria;
-
 
 public class CategoriaDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -27,33 +24,6 @@ public class CategoriaDTO implements Serializable{
 		this.nome = nome;
 	}
 
-	public CategoriaDTO(Categoria obj) {
-		this.id = obj.getId();
-		this.nome = obj.getNome();
-		if(obj.getParent() != null) {
-			this.pai = obj.getParent().getId();
-		}
-		
-		adicionarTopicos(this, obj.getTopicoCategoriaList());
-		adicionarItens(this, obj.getSubs());
-	}
-
-	private void adicionarTopicos(CategoriaDTO dto, List<TopicoCategoria> topicoCategoriaList) {
-		
-		for (TopicoCategoria topicoCategoria : topicoCategoriaList) {
-			TopicoDTO obj = new TopicoDTO(topicoCategoria.getId().getTopico().getId(), 
-					topicoCategoria.getId().getTopico().getNome());
-			dto.getTopicos().add(obj);
-		}
-		
-	}
-
-	private void adicionarItens(CategoriaDTO dto, List<Categoria> lista) {
-		for (Categoria categoria : lista) {
-			CategoriaDTO obj = new CategoriaDTO(categoria);
-			dto.getItens().add(obj);
-		}
-	}
 	
 	public Long getId() {
 		return id;

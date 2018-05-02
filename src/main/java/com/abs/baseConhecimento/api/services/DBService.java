@@ -34,8 +34,9 @@ public class DBService {
 	
 	public void instantiateTestDatabase() throws ParseException {
 		
-		Categoria cat1 = new Categoria(1L, "Php", null);
-		Categoria cat2 = new Categoria(2L, "Comandos", cat1);
+		Categoria cat1 = new Categoria(1L, "Php");
+		Categoria cat2 = new Categoria(2L, "Comandos");
+		cat2.setParent(cat1);
 		
 		Topico top1 = new Topico(1L, "echo");
 		
@@ -43,11 +44,14 @@ public class DBService {
 		
 		Informacao inf1 = new Informacao(1L, "echo $variavel;", top1);
 
-		Categoria cat3 = new Categoria(3L, "Linux", null);
-		Categoria cat4 = new Categoria(4L, "CentOS", cat3);
+		Categoria cat3 = new Categoria(3L, "Linux");
+		Categoria cat4 = new Categoria(4L, "CentOS");
+		cat4.setParent(cat3);
 		
-		Categoria cat5 = new Categoria(5L, "Ssh", cat4);
-		Categoria cat6 = new Categoria(6L, "Hardering", cat4);
+		Categoria cat5 = new Categoria(5L, "Ssh");
+		cat5.setParent(cat4);
+		Categoria cat6 = new Categoria(6L, "Hardering");
+		cat6.setParent(cat4);
 		
 		Topico top2 = new Topico(2L, "Como retirar o banner do serviço ssh");
 		TopicoCategoria tct2 = new TopicoCategoria(top2, cat5);

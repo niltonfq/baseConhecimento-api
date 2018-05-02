@@ -54,10 +54,10 @@ public class CategoriaControllerTest {
 
 	@Test
 	public void testListarPorId() throws Exception {
-		BDDMockito.given(this.categoriaService.buscarPorId(Mockito.anyLong()))
-			.willReturn(Optional.of(new Categoria(1L, "nome", null)));
+		BDDMockito.given(this.categoriaService.find(Mockito.anyLong()))
+			.willReturn(Optional.of(new Categoria(1L, "nome")));
 		
-		BDDMockito.given(this.categoriaService.toDto(Mockito.any(Categoria.class)))
+		BDDMockito.given(this.categoriaService.fromCategoriaToDto(Mockito.any(Categoria.class)))
 		.willReturn(new CategoriaDTO(1L, "nome"));
 		
 		mvc.perform(MockMvcRequestBuilders.get(URL+"/1")
@@ -78,12 +78,12 @@ public class CategoriaControllerTest {
 	@Test
 	public void testCadastrarCategoria() throws Exception {
 		
-		BDDMockito.given(this.categoriaService.fromDto(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
-			.willReturn(new Categoria(1L, "nome", null));
-		BDDMockito.given(this.categoriaService.toDto(Mockito.any(Categoria.class)))
+		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
+			.willReturn(new Categoria(1L, "nome"));
+		BDDMockito.given(this.categoriaService.fromCategoriaToDto(Mockito.any(Categoria.class)))
 			.willReturn(new CategoriaDTO(1L, "nome"));
 		BDDMockito.given(this.categoriaService.save(Mockito.any(Categoria.class)))
-			.willReturn(new Categoria(1L, "nome", null));
+			.willReturn(new Categoria(1L, "nome"));
 		
 		mvc.perform(MockMvcRequestBuilders.post(URL)
 				.content(this.obterJsonRequisicaoPost())
@@ -94,8 +94,8 @@ public class CategoriaControllerTest {
 	
 	private List<Categoria> dados() {
 		List<Categoria> lista = new ArrayList<>();
-		lista.add(new Categoria(1L, "nome", null));
-		lista.add(new Categoria(2L, "nome2", null));
+		lista.add(new Categoria(1L, "nome"));
+		lista.add(new Categoria(2L, "nome2"));
 		return lista;
 	}
 	
