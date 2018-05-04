@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.abs.baseConhecimento.api.dtos.InformacaoDTO;
 import com.abs.baseConhecimento.api.entities.Informacao;
 import com.abs.baseConhecimento.api.services.InformacaoService;
 
@@ -31,15 +32,19 @@ public class InformacaoControllerTest {
 	private MockMvc mvc;
 
 	@MockBean
-	private InformacaoService informacaoService;
+	private InformacaoService service;
 	
 	private static final String URL = "/api/informacoes";
 	private static final Long ID = 1L;
 
+	
 	@Test
 	public void testBuscarPorTopico() throws Exception {
-		BDDMockito.given(this.informacaoService.buscarPorTopicoId(ID))
+		BDDMockito.given(this.service.buscarPorTopicoId(ID))
 			.willReturn(this.dados());
+		
+		BDDMockito.given(this.service.fromInformacaoToDto(new Informacao(1L, "descricao", null)))
+		.willReturn(new InformacaoDTO(1L, "descricao"));
 		
 		mvc.perform(MockMvcRequestBuilders.get(URL + "/topico/" + ID)
 				.accept(MediaType.APPLICATION_JSON))
@@ -48,7 +53,7 @@ public class InformacaoControllerTest {
 
 	@Test
 	public void testBuscarPorTopicoNaoEncontrado() throws Exception {
-		BDDMockito.given(this.informacaoService.buscarPorTopicoId(ID))
+		BDDMockito.given(this.service.buscarPorTopicoId(ID))
 		.willReturn(new ArrayList<>());
 		
 		mvc.perform(MockMvcRequestBuilders.get(URL+ "/topico/" + ID)

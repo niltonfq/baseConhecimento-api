@@ -51,7 +51,7 @@ public class InformacaoController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		List<InformacaoDTO> informacoesDto = informacoes.stream().map(info -> this.informacaoService.toDto(info))
+		List<InformacaoDTO> informacoesDto = informacoes.stream().map(info -> this.informacaoService.fromInformacaoToDto(info))
 				.collect(Collectors.toList());   
 
 		response.setData(informacoesDto);
