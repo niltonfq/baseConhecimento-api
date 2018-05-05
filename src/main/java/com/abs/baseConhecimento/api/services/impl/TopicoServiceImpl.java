@@ -42,11 +42,13 @@ public class TopicoServiceImpl implements TopicoService{
 
 	@Override
 	public TopicoDTO fromTopicoToDto(Topico topico) {
+		if (topico == null) return null;
 		return new TopicoDTO(topico.getId(), topico.getNome());
 	}
 
 	@Override
 	public Topico fromDtoToTopico(TopicoDTO topicoDTO, BindingResult result) {
+		if (topicoDTO == null) return null;
 		return new Topico(topicoDTO.getId(), topicoDTO.getNome());
 	}
 	

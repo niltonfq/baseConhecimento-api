@@ -13,10 +13,10 @@ public interface InformacaoService {
 	List<Informacao> buscarPorTopicoId(Long topicoId);
 	
 	Optional<Informacao> find(Long id);
-	Informacao save(Informacao informacao);
-	Informacao update(Informacao informacao);
+	Informacao insert(Informacao obj);
+	Informacao update(Informacao obj);
 	void delete(Long id);
 	
-	InformacaoDTO fromInformacaoToDto(Informacao info);
-	Informacao fromDtoToInformacao(InformacaoDTO informacaoDTO, BindingResult result);
+	InformacaoDTO fromInformacaoToDto(Informacao obj);
+	Informacao fromDtoToInformacao(InformacaoDTO dto, BindingResult result);
 }

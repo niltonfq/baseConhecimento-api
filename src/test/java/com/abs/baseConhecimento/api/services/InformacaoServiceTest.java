@@ -54,7 +54,7 @@ public class InformacaoServiceTest {
 	
 	@Test
 	public void testSave() {
-		Informacao info = service.save(umaInformacao());
+		Informacao info = service.update(umaInformacao());
 		assertNotNull(info);
 	}
 

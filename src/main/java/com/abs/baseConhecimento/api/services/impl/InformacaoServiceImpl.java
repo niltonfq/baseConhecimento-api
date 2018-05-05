@@ -37,13 +37,19 @@ public class InformacaoServiceImpl implements InformacaoService{
 	}
 
 	@Override
-	public Informacao save(Informacao informacao) {
-		return repo.save(informacao);
+	public Informacao insert(Informacao obj) {
+		return repo.save(obj);
+	}
+
+	private void updateData(Informacao novo, Informacao informacao) {
+		informacao.setDescricao(novo.getDescricao());
 	}
 
 	@Override
-	public Informacao update(Informacao informacao) {
-		return repo.save(informacao);
+	public Informacao update(Informacao obj) {
+		Optional<Informacao> info = find(obj.getId());
+		updateData(obj, info.get());
+		return repo.save(info.get());
 	}
 
 	@Override
