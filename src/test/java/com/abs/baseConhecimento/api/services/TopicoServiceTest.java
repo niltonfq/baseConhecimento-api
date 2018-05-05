@@ -44,7 +44,7 @@ public class TopicoServiceTest {
 
 	@Test
 	public void testFromDtoToTopico() {
-		Topico top = service.fromDtoToTopico(umTopicoDto(), null);
+		Topico top = service.fromDtoToTopico(umTopicoDto());
 		assertNotNull(top);
 	}
 

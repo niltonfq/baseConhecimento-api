@@ -1,9 +1,7 @@
 package com.abs.baseConhecimento.api.controller;
 
 import java.net.URI;
-import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -12,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,71 +34,63 @@ public class CategoriaController {
 	private static final Logger log = LoggerFactory.getLogger(CategoriaController.class);
 	
 	@Autowired
-	private CategoriaService categoriaService;
+	private CategoriaService service;
 	
 	/**
 	 * Remove um categoria por ID.
 	 * 
 	 * @param id
-	 * @return ResponseEntity<Response<Categoria>>
+	 * @return ResponseEntity<Void>
 	 */
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
-		log.info("Removendo categoria: {}", id);
-		Response<String> response = new Response<String>();
-
-		this.categoriaService.delete(id);
-		return ResponseEntity.ok(new Response<String>());
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	/**
 	 * Atualiza os dados de uma categoria.
 	 * 
 	 * @param id
-	 * @param categoriaDTO
-	 * @return ResponseEntity<Response<Categoria>>
-	 * @throws ParseException 
+	 * @param CategoriaDTO
+	 * @return ResponseEntity<Void>
 	 */
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Response<CategoriaDTO>> atualizar(@PathVariable("id") Long id,
-			@Valid @RequestBody CategoriaDTO categoriaDTO, BindingResult result) throws ParseException {
-		
-		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
-		
-		Categoria categoria = this.categoriaService.fromDtoToCategoria(categoriaDTO, result);
-		log.info("Atualizando categoria: {}", categoria.toString());
-		categoria.setId(id);
-		if (result.hasErrors()) {
-			log.error("Erro validando categoria: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		categoria = this.categoriaService.update(categoria);
-		if (categoria == null) {
-			log.info("Categoria não encontrada para o ID: {}", id);
-			response.getErrors().add("Categoria não encontrada para o id " + id);
-			return ResponseEntity.badRequest().body(response);
-		}
-		
-		response.setData(this.categoriaService.fromCategoriaToDto(categoria));
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Void> update(
+			@PathVariable("id") Long id,
+			@Valid @RequestBody CategoriaDTO objDto) {
+		Categoria obj = service.fromDtoToCategoria(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 	/**
 	 * Retorna uma categoria por ID.
 	 * 
 	 * @param id
-	 * @return ResponseEntity<Response<CategoriaDTO>>
+	 * @return ResponseEntity<Response<Categoria>>
 	 */
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Response<CategoriaDTO>> listarPorId(@PathVariable("id") Long id) {
-		log.info("Buscando categoria por ID: {}", id);
-		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
-		Categoria categoria = this.categoriaService.find(id);
-
-		response.setData(this.categoriaService.fromCategoriaToDto(categoria));
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Categoria> find(@PathVariable("id") Long id) {
+		Categoria obj = service.find(id);
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	/**
+	 * Adiciona uma nova categoria.
+	 * 
+	 * @param categoriaDTO
+	 * @param result
+	 * @return ResponseEntity<Void>
+	 */
+	@PostMapping
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+		Categoria obj = service.fromDtoToCategoria(categoriaDTO);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	/**
@@ -115,49 +104,18 @@ public class CategoriaController {
 		
 		Response<List<CategoriaDTO>> response = new Response<List<CategoriaDTO>>();
 		
-		List<Categoria> list = this.categoriaService.list();
+		List<Categoria> list = service.list();
 		if (list.isEmpty()) {
 			log.info("Nenhuma categoria pai encontrada");
 			response.getErrors().add("Nenhuma categoria pai encontrada");
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		List<CategoriaDTO> listDto = list.stream().map(obj -> categoriaService.fromCategoriaToDtoComSubsComTopicos(obj))
+		List<CategoriaDTO> listDto = list.stream().map(obj -> service.fromCategoriaToDtoComSubsComTopicos(obj))
 				.collect(Collectors.toList());
 		
 		response.setData(listDto);
 		return ResponseEntity.ok(response);
 	}
 	
-	/**
-	 * Adiciona uma nova categoria.
-	 * 
-	 * @param categoriaDTO
-	 * @param result
-	 * @return ResponseEntity<Response<CategoriaDTO>>
-	 * @throws ParseException 
-	 */
-	@PostMapping
-	public ResponseEntity<Response<CategoriaDTO>> adicionar(@Valid @RequestBody CategoriaDTO categoriaDTO,
-			BindingResult result) 
-			throws ParseException {
-
-		log.info("Adicionando categoria: {}", categoriaDTO.toString());
-		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
-		
-		Categoria categoria = this.categoriaService.fromDtoToCategoria(categoriaDTO, result);
-
-		if (result.hasErrors()) {
-			log.error("Erro validando categoria: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		categoria = this.categoriaService.insert(categoria);
-		CategoriaDTO obj = this.categoriaService.fromCategoriaToDto(categoria);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
-	}
 }

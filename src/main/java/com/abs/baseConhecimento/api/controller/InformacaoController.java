@@ -1,7 +1,6 @@
 package com.abs.baseConhecimento.api.controller;
 
 import java.net.URI;
-import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +33,7 @@ import com.abs.baseConhecimento.api.services.InformacaoService;
 public class InformacaoController {
 
 	@Autowired
-	private InformacaoService informacaoService;
+	private InformacaoService service;
 	
 	private static final Logger log = LoggerFactory.getLogger(InformacaoController.class);
 	
@@ -43,80 +41,41 @@ public class InformacaoController {
 	 * Remove uma Informação por ID.
 	 * 
 	 * @param id
-	 * @return ResponseEntity<Response<String>>
+	 * @return ResponseEntity<Void>
 	 */
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
-		log.info("Removendo categoria: {}", id);
-		Response<String> response = new Response<String>();
-		Informacao categoria = this.informacaoService.find(id);
-
-
-		this.informacaoService.delete(id);
-		return ResponseEntity.ok(new Response<String>());
+	public ResponseEntity<Void> remover(@PathVariable("id") Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	/**
 	 * Atualiza os dados de uma informacao.
 	 * 
 	 * @param id
-	 * @param informacaoDTO
-	 * @return ResponseEntity<Response<Categoria>>
-	 * @throws ParseException 
+	 * @param objDto
+	 * @return ResponseEntity<Void>
 	 */
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Response<InformacaoDTO>> atualizar(@PathVariable("id") Long id,
-			@Valid @RequestBody InformacaoDTO informacaoDTO, BindingResult result) throws ParseException {
-		
-		Response<InformacaoDTO> response = new Response<InformacaoDTO>();
-		
-		Informacao info = this.informacaoService.fromDtoToInformacao(informacaoDTO, result);
-		log.info("Atualizando Informacao: {}", info.toString());
-		info.setId(id);
-		if (result.hasErrors()) {
-			log.error("Erro validando Informacao: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		info = this.informacaoService.update(info);
-		if (info == null) {
-			log.info("Informacao não encontrada para o ID: {}", id);
-			response.getErrors().add("Informacao não encontrada para o id " + id);
-			return ResponseEntity.badRequest().body(response);
-		}
-		
-		response.setData(this.informacaoService.fromInformacaoToDto(info));
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Void> update(@PathVariable("id") Long id,
+			@Valid @RequestBody InformacaoDTO objDto) {
+		Informacao obj = service.fromDtoToInformacao(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 	/**
 	 * Adiciona uma informação.
 	 * 
-	 * @param informacaoDTO
-	 * @param result
-	 * @return ResponseEntity<Response<InformacaoDTO>>
-	 * @throws ParseException 
+	 * @param InformacaoDTO
+	 * @return ResponseEntity<Response<Informacao>>
 	 */
 	@PostMapping
-	public ResponseEntity<Response<InformacaoDTO>> adicionar(@Valid @RequestBody InformacaoDTO informacaoDTO,
-			BindingResult result) throws ParseException {
+	public ResponseEntity<Response<Informacao>> insert(@Valid @RequestBody InformacaoDTO objDto) {
 		
-		informacaoDTO.setId(null);
-		log.info("Adicionando informacao: {}", informacaoDTO.toString());
-		Response<InformacaoDTO> response = new Response<InformacaoDTO>();
-		
-		Informacao info = this.informacaoService.fromDtoToInformacao(informacaoDTO, result);
-
-		if (result.hasErrors()) {
-			log.error("Erro validando informacao: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		info = this.informacaoService.insert(info);
-		InformacaoDTO obj = this.informacaoService.fromInformacaoToDto(info);
-		
+		Informacao obj = service.fromDtoToInformacao(objDto);
+		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -136,7 +95,7 @@ public class InformacaoController {
 		log.info("Buscando informações por ID do tópico: {}", topicoId);
 		Response<List<InformacaoDTO>> response = new Response<List<InformacaoDTO>>();
 
-		List<Informacao> informacoes = this.informacaoService.buscarPorTopicoId(topicoId);
+		List<Informacao> informacoes = service.buscarPorTopicoId(topicoId);
 		
 		if (informacoes.isEmpty()) {
 			log.info("Nenhuma informação encontrada");
@@ -144,7 +103,7 @@ public class InformacaoController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		List<InformacaoDTO> informacoesDto = informacoes.stream().map(info -> this.informacaoService.fromInformacaoToDto(info))
+		List<InformacaoDTO> informacoesDto = informacoes.stream().map(info -> service.fromInformacaoToDto(info))
 				.collect(Collectors.toList());   
 
 		response.setData(informacoesDto);

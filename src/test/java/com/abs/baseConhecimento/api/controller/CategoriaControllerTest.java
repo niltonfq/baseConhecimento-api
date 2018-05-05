@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.validation.BindingResult;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
@@ -78,7 +76,7 @@ public class CategoriaControllerTest {
 	@Test
 	public void testCadastrarCategoria() throws Exception {
 		
-		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
+		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class)))
 			.willReturn(new Categoria(1L, "nome"));
 		BDDMockito.given(this.categoriaService.fromCategoriaToDto(Mockito.any(Categoria.class)))
 			.willReturn(new CategoriaDTO(1L, "nome"));
@@ -95,7 +93,7 @@ public class CategoriaControllerTest {
 	@Test
 	public void testAlterarCategoria() throws Exception {
 		
-		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class), Mockito.any(BindingResult.class)))
+		BDDMockito.given(this.categoriaService.fromDtoToCategoria(Mockito.any(CategoriaDTO.class)))
 			.willReturn(new Categoria(1L, "nome"));
 		BDDMockito.given(this.categoriaService.fromCategoriaToDto(Mockito.any(Categoria.class)))
 			.willReturn(new CategoriaDTO(1L, "nome"));
@@ -106,7 +104,7 @@ public class CategoriaControllerTest {
 				.content(this.obterJsonRequisicaoPost())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(status().isNoContent());
 	}
 	
 	@Test
@@ -117,7 +115,7 @@ public class CategoriaControllerTest {
 		
 		mvc.perform(MockMvcRequestBuilders.delete(URL+"/1")
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(status().isNoContent());
 	}
 	
 	private List<Categoria> dados() {

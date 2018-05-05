@@ -1,7 +1,5 @@
 package com.abs.baseConhecimento.api.services;
 
-import org.springframework.validation.BindingResult;
-
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
 
@@ -13,5 +11,5 @@ public interface TopicoService {
 	void delete(Long id);
 	
 	TopicoDTO fromTopicoToDto(Topico topico);
-	Topico fromDtoToTopico(TopicoDTO topicoDTO, BindingResult result);
+	Topico fromDtoToTopico(TopicoDTO topicoDTO);
 }

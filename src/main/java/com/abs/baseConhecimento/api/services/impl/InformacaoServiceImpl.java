@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import com.abs.baseConhecimento.api.dtos.InformacaoDTO;
 import com.abs.baseConhecimento.api.entities.Informacao;
@@ -58,9 +57,9 @@ public class InformacaoServiceImpl implements InformacaoService{
 	}
 
 	@Override
-	public Informacao fromDtoToInformacao(InformacaoDTO informacaoDTO, BindingResult result) {
+	public Informacao fromDtoToInformacao(InformacaoDTO informacaoDTO) {
 		return new Informacao(informacaoDTO.getId(), informacaoDTO.getDescricao(), 
-				topicoService.fromDtoToTopico(informacaoDTO.getTopico(), result));
+				topicoService.fromDtoToTopico(informacaoDTO.getTopico()));
 	}
 	
 	@Override

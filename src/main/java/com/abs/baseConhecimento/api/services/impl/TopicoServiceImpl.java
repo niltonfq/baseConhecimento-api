@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
@@ -58,7 +57,7 @@ public class TopicoServiceImpl implements TopicoService{
 	}
 
 	@Override
-	public Topico fromDtoToTopico(TopicoDTO topicoDTO, BindingResult result) {
+	public Topico fromDtoToTopico(TopicoDTO topicoDTO) {
 		if (topicoDTO == null) return null;
 		return new Topico(topicoDTO.getId(), topicoDTO.getNome());
 	}

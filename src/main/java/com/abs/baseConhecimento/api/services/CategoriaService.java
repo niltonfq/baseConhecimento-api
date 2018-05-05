@@ -2,8 +2,6 @@ package com.abs.baseConhecimento.api.services;
 
 import java.util.List;
 
-import org.springframework.validation.BindingResult;
-
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
 
@@ -17,6 +15,6 @@ public interface CategoriaService {
 
 	CategoriaDTO fromCategoriaToDto(Categoria obj);
 	CategoriaDTO fromCategoriaToDtoComSubsComTopicos(Categoria obj);
-	Categoria fromDtoToCategoria(CategoriaDTO categoriaDTO, BindingResult result);
+	Categoria fromDtoToCategoria(CategoriaDTO categoriaDTO);
 
 }

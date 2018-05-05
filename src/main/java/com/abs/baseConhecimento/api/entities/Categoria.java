@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Categoria implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -56,6 +59,7 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 	
+	@JsonIgnore
 	@ManyToOne
     @JoinColumn(name = "parent")
 	public Categoria getParent() {
@@ -84,6 +88,7 @@ public class Categoria implements Serializable{
 		this.topicoCategoriaList = topicoCategoriaList;
 	}
 
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm")
 	@Column(nullable=false)
 	public Date getDataCriacao() {
 		return dataCriacao;
@@ -93,6 +98,7 @@ public class Categoria implements Serializable{
 		this.dataCriacao = dataCriacao;
 	}
 
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm")
 	@Column(nullable=false)
 	public Date getDataAtualizacao() {
 		return dataAtualizacao;

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
@@ -106,7 +105,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	
 	
 	@Override
-	public Categoria fromDtoToCategoria(CategoriaDTO dto, BindingResult result) {
+	public Categoria fromDtoToCategoria(CategoriaDTO dto) {
 		
 		Categoria cat = new Categoria(dto.getId(), dto.getNome());
 		if(dto.getPai() != null) {
