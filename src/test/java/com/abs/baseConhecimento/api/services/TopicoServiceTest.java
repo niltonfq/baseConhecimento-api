@@ -1,9 +1,6 @@
 package com.abs.baseConhecimento.api.services;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +22,13 @@ public class TopicoServiceTest {
 
 	@Test
 	public void testFind() {
-		Optional<Topico> topico = service.find(1L);
-		assertTrue(topico.isPresent());
+		Topico topico = service.find(1L);
+		assertNotNull(topico);
 	}
 
 	@Test
 	public void testSave() {
-		Topico top = service.save(umTopico());
+		Topico top = service.insert(umTopico());
 		assertNotNull(top.getId());
 	}
 

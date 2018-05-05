@@ -1,7 +1,6 @@
 package com.abs.baseConhecimento.api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.validation.BindingResult;
 
@@ -12,7 +11,7 @@ public interface InformacaoService {
 
 	List<Informacao> buscarPorTopicoId(Long topicoId);
 	
-	Optional<Informacao> find(Long id);
+	Informacao find(Long id);
 	Informacao insert(Informacao obj);
 	Informacao update(Informacao obj);
 	void delete(Long id);

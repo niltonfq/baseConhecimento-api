@@ -12,6 +12,7 @@ import com.abs.baseConhecimento.api.entities.Informacao;
 import com.abs.baseConhecimento.api.repositories.InformacaoRepository;
 import com.abs.baseConhecimento.api.services.InformacaoService;
 import com.abs.baseConhecimento.api.services.TopicoService;
+import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class InformacaoServiceImpl implements InformacaoService{
@@ -27,17 +28,15 @@ public class InformacaoServiceImpl implements InformacaoService{
 	}
 
 	@Override
-	public InformacaoDTO fromInformacaoToDto(Informacao info) {
-		return new InformacaoDTO(info.getId(), info.getDescricao());
-	}
-
-	@Override
-	public Optional<Informacao> find(Long id) {
-		return repo.findById(id);
+	public Informacao find(Long id) {
+		Optional<Informacao> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Informacao.class.getName()));
 	}
 
 	@Override
 	public Informacao insert(Informacao obj) {
+		obj.setId(null);
 		return repo.save(obj);
 	}
 
@@ -47,13 +46,14 @@ public class InformacaoServiceImpl implements InformacaoService{
 
 	@Override
 	public Informacao update(Informacao obj) {
-		Optional<Informacao> info = find(obj.getId());
-		updateData(obj, info.get());
-		return repo.save(info.get());
+		Informacao newObj = find(obj.getId());
+		updateData(obj, newObj);
+		return repo.save(newObj);
 	}
 
 	@Override
 	public void delete(Long id) {
+		find(id);
 		repo.deleteById(id);
 	}
 
@@ -62,5 +62,9 @@ public class InformacaoServiceImpl implements InformacaoService{
 		return new Informacao(informacaoDTO.getId(), informacaoDTO.getDescricao(), 
 				topicoService.fromDtoToTopico(informacaoDTO.getTopico(), result));
 	}
-
+	
+	@Override
+	public InformacaoDTO fromInformacaoToDto(Informacao info) {
+		return new InformacaoDTO(info.getId(), info.getDescricao());
+	}
 }

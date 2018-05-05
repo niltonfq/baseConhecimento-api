@@ -49,13 +49,6 @@ public class CategoriaController {
 	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
 		log.info("Removendo categoria: {}", id);
 		Response<String> response = new Response<String>();
-		Optional<Categoria> categoria = this.categoriaService.find(id);
-
-		if (!categoria.isPresent()) {
-			log.info("Erro ao remover devido ao categoria ID: {} ser inválido.", id);
-			response.getErrors().add("Erro ao remover categoria. Registro não encontrado para o id " + id);
-			return ResponseEntity.badRequest().body(response);
-		}
 
 		this.categoriaService.delete(id);
 		return ResponseEntity.ok(new Response<String>());
@@ -105,15 +98,9 @@ public class CategoriaController {
 	public ResponseEntity<Response<CategoriaDTO>> listarPorId(@PathVariable("id") Long id) {
 		log.info("Buscando categoria por ID: {}", id);
 		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
-		Optional<Categoria> categoria = this.categoriaService.find(id);
+		Categoria categoria = this.categoriaService.find(id);
 
-		if (!categoria.isPresent()) {
-			log.info("Categoria não encontrada para o ID: {}", id);
-			response.getErrors().add("Categoria não encontrada para o id " + id);
-			return ResponseEntity.badRequest().body(response);
-		}
-
-		response.setData(this.categoriaService.fromCategoriaToDto(categoria.get()));
+		response.setData(this.categoriaService.fromCategoriaToDto(categoria));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -154,8 +141,7 @@ public class CategoriaController {
 	public ResponseEntity<Response<CategoriaDTO>> adicionar(@Valid @RequestBody CategoriaDTO categoriaDTO,
 			BindingResult result) 
 			throws ParseException {
-		
-		categoriaDTO.setId(null);
+
 		log.info("Adicionando categoria: {}", categoriaDTO.toString());
 		Response<CategoriaDTO> response = new Response<CategoriaDTO>();
 		
@@ -167,7 +153,7 @@ public class CategoriaController {
 			return ResponseEntity.badRequest().body(response);
 		}
 
-		categoria = this.categoriaService.save(categoria);
+		categoria = this.categoriaService.insert(categoria);
 		CategoriaDTO obj = this.categoriaService.fromCategoriaToDto(categoria);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

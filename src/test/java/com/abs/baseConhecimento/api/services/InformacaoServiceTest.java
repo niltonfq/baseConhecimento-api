@@ -35,7 +35,7 @@ public class InformacaoServiceTest {
 	
 	@Before
 	public void setUp() {
-		BDDMockito.given(this.repo.findById(Mockito.anyLong())).willReturn(Optional.of(new Informacao()));
+		BDDMockito.given(this.repo.findById(Mockito.anyLong())).willReturn(Optional.of(umaInformacao()));
 		BDDMockito.given(this.repo.save(umaInformacao())).willReturn(new Informacao());
 		BDDMockito.given(this.repo.findByTopicoId(Mockito.anyLong())).willReturn(new ArrayList<>());
 	}
@@ -53,7 +53,7 @@ public class InformacaoServiceTest {
 	}
 	
 	@Test
-	public void testSave() {
+	public void testUpdate() {
 		Informacao info = service.update(umaInformacao());
 		assertNotNull(info);
 	}

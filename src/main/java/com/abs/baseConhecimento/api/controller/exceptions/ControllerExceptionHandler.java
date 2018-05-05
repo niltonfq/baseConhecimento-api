@@ -1,4 +1,4 @@
-package com.abs.baseConhecimento.api.controller.exception;
+package com.abs.baseConhecimento.api.controller.exceptions;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.abs.baseConhecimento.api.response.Response;
+import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -33,6 +34,18 @@ public class ControllerExceptionHandler {
 		
 		Response err = new Response<Object>();
 		err.getErrors().add("Erro de integridade de dados");
+		err.getErrors().add("Path:"+request.getRequestURI());
+		err.getErrors().add("Método:"+request.getMethod());
+				
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@ExceptionHandler(ObjectNotFoundException.class)
+	public ResponseEntity<Response<Object>> objectNotFoundException(ObjectNotFoundException e, HttpServletRequest request) {
+		
+		Response err = new Response<Object>();
+		err.getErrors().add(e.getMessage());
 		err.getErrors().add("Path:"+request.getRequestURI());
 		err.getErrors().add("Método:"+request.getMethod());
 				

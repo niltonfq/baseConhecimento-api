@@ -3,7 +3,6 @@ package com.abs.baseConhecimento.api.controller;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -50,13 +49,8 @@ public class InformacaoController {
 	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
 		log.info("Removendo categoria: {}", id);
 		Response<String> response = new Response<String>();
-		Optional<Informacao> categoria = this.informacaoService.find(id);
+		Informacao categoria = this.informacaoService.find(id);
 
-		if (!categoria.isPresent()) {
-			log.info("Erro ao remover devido a Informacao ID: {} ser inválido.", id);
-			response.getErrors().add("Erro ao remover Informacao. Registro não encontrado para o id " + id);
-			return ResponseEntity.badRequest().body(response);
-		}
 
 		this.informacaoService.delete(id);
 		return ResponseEntity.ok(new Response<String>());

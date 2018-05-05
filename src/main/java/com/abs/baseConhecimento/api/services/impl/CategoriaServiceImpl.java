@@ -14,6 +14,7 @@ import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
+import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 
 
 @Service
@@ -25,6 +26,37 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private CategoriaRepository repo;
 	@Autowired
 	private TopicoCategoriaRepository topicoCategoriaRepository;
+
+	@Override
+	public Categoria insert(Categoria obj) {
+		obj.setId(null);
+		return repo.save(obj);
+	}
+
+	@Override
+	public Categoria find(Long id) {
+		Optional<Categoria> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
+	}
+	
+	@Override
+	public Categoria update(Categoria obj) {
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+	
+	@Override
+	public void delete(Long id) {
+		find(id);
+		repo.deleteById(id);
+	}
+
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+		newObj.setParent(obj.getParent());
+	}
 
 	@Override
 	public List<Categoria> list() {
@@ -42,35 +74,6 @@ public class CategoriaServiceImpl implements CategoriaService{
 		for (Categoria filho : pai.getSubs()) {
 			carregaSubs(filho);
 		}
-	}
-
-	@Override
-	public Categoria save(Categoria categoria) {
-		return repo.save(categoria);
-	}
-
-	@Override
-	public Optional<Categoria> find(Long id) {
-		return repo.findById(id);
-	}
-	
-	@Override
-	public Categoria update(Categoria obj) {
-		Optional<Categoria> newObj = find(obj.getId());
-		if(newObj == null) {
-			return null;
-		}
-		updateData(newObj.get(), obj);
-		return repo.save(newObj.get());
-	}
-
-	@Override
-	public CategoriaDTO fromCategoriaToDto(Categoria obj) {
-		CategoriaDTO dto = new CategoriaDTO(obj.getId(), obj.getNome());		
-		if(obj.getParent() != null) {
-			dto.setPai(obj.getParent().getId());
-		}
-		return dto;
 	}
 	
 	@Override
@@ -113,14 +116,12 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return cat;
 	}
 	
-	private void updateData(Categoria newObj, Categoria obj) {
-		newObj.setNome(obj.getNome());
-		newObj.setParent(obj.getParent());
-	}
-
 	@Override
-	public void delete(Long id) {
-		repo.deleteById(id);
+	public CategoriaDTO fromCategoriaToDto(Categoria obj) {
+		CategoriaDTO dto = new CategoriaDTO(obj.getId(), obj.getNome());		
+		if(obj.getParent() != null) {
+			dto.setPai(obj.getParent().getId());
+		}
+		return dto;
 	}
-
 }

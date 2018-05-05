@@ -10,6 +10,7 @@ import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
 import com.abs.baseConhecimento.api.repositories.TopicoRepository;
 import com.abs.baseConhecimento.api.services.TopicoService;
+import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 
 
 @Service
@@ -21,25 +22,35 @@ public class TopicoServiceImpl implements TopicoService{
 	private TopicoRepository repo;
 
 	@Override
-	public Optional<Topico> find(Long id) {
-		return repo.findById(id);
+	public Topico find(Long id) {
+		Optional<Topico> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Topico.class.getName()));
 	}
 
 	@Override
-	public Topico save(Topico topico) {
-		return repo.save(topico);
+	public Topico insert(Topico obj) {
+		obj.setId(null);
+		return repo.save(obj);
 	}
 
 	@Override
-	public Topico update(Topico topico) {
-		return repo.save(topico);
+	public Topico update(Topico obj) {
+		Topico newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
 	}
 
 	@Override
 	public void delete(Long id) {
+		find(id);
 		repo.deleteById(id);
 	}
 
+	private void updateData(Topico newObj, Topico obj) {
+		newObj.setNome(obj.getNome());
+	}
+	
 	@Override
 	public TopicoDTO fromTopicoToDto(Topico topico) {
 		if (topico == null) return null;
