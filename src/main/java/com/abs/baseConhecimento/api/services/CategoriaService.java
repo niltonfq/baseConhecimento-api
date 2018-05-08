@@ -7,7 +7,7 @@ import com.abs.baseConhecimento.api.entities.Categoria;
 
 public interface CategoriaService {
 
-	List<Categoria> list();
+	List<Categoria> listar();
 	Categoria find(Long id);
 	Categoria insert(Categoria obj);
 	Categoria update(Categoria obj);
@@ -16,5 +16,6 @@ public interface CategoriaService {
 	CategoriaDTO fromCategoriaToDto(Categoria obj);
 	CategoriaDTO fromCategoriaToDtoComSubsComTopicos(Categoria obj);
 	Categoria fromDtoToCategoria(CategoriaDTO categoriaDTO);
+	List<Categoria> list();
 
 }

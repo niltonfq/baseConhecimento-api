@@ -42,7 +42,7 @@ public class CategoriaControllerTest {
 	
 	@Test
 	public void testList() throws Exception {
-		BDDMockito.given(this.categoriaService.list())
+		BDDMockito.given(this.categoriaService.listar())
 			.willReturn(this.dados());
 		
 		mvc.perform(MockMvcRequestBuilders.get(URL)
@@ -65,7 +65,7 @@ public class CategoriaControllerTest {
 	
 	@Test
 	public void testListSemCategoriasPai() throws Exception {
-		BDDMockito.given(this.categoriaService.list())
+		BDDMockito.given(this.categoriaService.listar())
 		.willReturn(new ArrayList<>());
 		
 		mvc.perform(MockMvcRequestBuilders.get(URL)

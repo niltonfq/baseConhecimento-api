@@ -24,7 +24,7 @@ public class CategoriaServiceTest {
 	
 	@Test
 	public void testListar() {
-		List<Categoria> lista = categoriaService.list();
+		List<Categoria> lista = categoriaService.listar();
 		assertFalse(lista.isEmpty());
 	}
 }

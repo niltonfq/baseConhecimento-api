@@ -58,7 +58,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	@Override
-	public List<Categoria> list() {
+	public List<Categoria> listar() {
 		List<Categoria> lista = repo.findByParentIsNull();
 		for (Categoria categoria : lista) {
 			carregaSubs(categoria);
@@ -120,7 +120,15 @@ public class CategoriaServiceImpl implements CategoriaService{
 		CategoriaDTO dto = new CategoriaDTO(obj.getId(), obj.getNome());		
 		if(obj.getParent() != null) {
 			dto.setPai(obj.getParent().getId());
+			dto.setNomePai(obj.getParent().getNome());
+		} else {
+			dto.setNomePai("");
 		}
 		return dto;
+	}
+
+	@Override
+	public List<Categoria> list() {
+		return repo.findAll();
 	}
 }

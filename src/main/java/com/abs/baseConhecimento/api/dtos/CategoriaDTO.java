@@ -11,6 +11,7 @@ public class CategoriaDTO implements Serializable{
 	private Long id;
 	private String nome;
 	private Long pai;
+	private String nomePai;
 	
 	private List<CategoriaDTO> itens = new ArrayList<>();
 	private List<TopicoDTO> topicos = new ArrayList<>();
@@ -60,6 +61,14 @@ public class CategoriaDTO implements Serializable{
 
 	public void setPai(Long pai) {
 		this.pai = pai;
+	}
+
+	public String getNomePai() {
+		return nomePai;
+	}
+
+	public void setNomePai(String nomePai) {
+		this.nomePai = nomePai;
 	}
 	
 }

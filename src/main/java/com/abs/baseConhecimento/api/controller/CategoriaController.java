@@ -104,7 +104,7 @@ public class CategoriaController {
 		
 		Response<List<CategoriaDTO>> response = new Response<List<CategoriaDTO>>();
 		
-		List<Categoria> list = service.list();
+		List<Categoria> list = service.listar();
 		if (list.isEmpty()) {
 			log.info("Nenhuma categoria pai encontrada");
 			response.getErrors().add("Nenhuma categoria pai encontrada");
@@ -118,4 +118,28 @@ public class CategoriaController {
 		return ResponseEntity.ok(response);
 	}
 	
+	/**
+	 * Retorna a listagem de categorias 
+	 * 
+	 * @param none
+	 * @return ResponseEntity<Response<List<CategoriaDTO>>>
+	 */
+	@GetMapping(value = "/listar")
+	public ResponseEntity<Response<List<CategoriaDTO>>> list() {
+		
+		Response<List<CategoriaDTO>> response = new Response<List<CategoriaDTO>>();
+		
+		List<Categoria> list = service.list();
+		if (list.isEmpty()) {
+			log.info("Nenhuma categoria pai encontrada");
+			response.getErrors().add("Nenhuma categoria pai encontrada");
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		List<CategoriaDTO> listDto = list.stream().map(obj -> service.fromCategoriaToDtoComSubsComTopicos(obj))
+				.collect(Collectors.toList());
+		
+		response.setData(listDto);
+		return ResponseEntity.ok(response);
+	}
 }

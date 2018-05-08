@@ -44,7 +44,7 @@ public class InformacaoController {
 	 * @return ResponseEntity<Void>
 	 */
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> remover(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
