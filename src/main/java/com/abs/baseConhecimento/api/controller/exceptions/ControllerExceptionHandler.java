@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.abs.baseConhecimento.api.response.Response;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
+import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -52,4 +53,15 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@ExceptionHandler(ViolacaoIntegridadeException.class)
+	public ResponseEntity<Response<Object>> ViolacaoIntegridadeException(ViolacaoIntegridadeException e, HttpServletRequest request) {
+		
+		Response err = new Response<Object>();
+		err.getErrors().add(e.getMessage());
+		err.getErrors().add("Path:"+request.getRequestURI());
+		err.getErrors().add("Método:"+request.getMethod());
+				
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
 }

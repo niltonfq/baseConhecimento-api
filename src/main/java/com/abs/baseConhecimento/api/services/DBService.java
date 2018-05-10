@@ -52,6 +52,8 @@ public class DBService {
 		cat5.setParent(cat4);
 		Categoria cat6 = new Categoria(6L, "Hardering");
 		cat6.setParent(cat4);
+		Categoria cat7 = new Categoria(7L, "htop");
+		cat7.setParent(cat4);
 		
 		Topico top2 = new Topico(2L, "Como retirar o banner do serviço ssh");
 		TopicoCategoria tct2 = new TopicoCategoria(top2, cat5);
@@ -61,7 +63,7 @@ public class DBService {
 		Anexo ane1 = new Anexo(1L, "manual do ssh server", "/var/www/html/manuais/ssh.pdf", top2);
 		
 		
-		categoriaRepository.saveAll(Arrays.asList(cat1,cat2, cat3, cat4, cat5, cat6));
+		categoriaRepository.saveAll(Arrays.asList(cat1,cat2, cat3, cat4, cat5, cat6, cat7));
 		topicoRepository.saveAll(Arrays.asList(top1, top2));
 		topicoCategoriaRepository.saveAll(Arrays.asList(tct1, tct2, tct3));
 		informacaoRepository.saveAll(Arrays.asList(inf1, inf2));

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
@@ -14,6 +15,7 @@ import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
+import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeException;
 
 
 @Service
@@ -27,6 +29,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private TopicoCategoriaRepository topicoCategoriaRepository;
 
 	@Override
+	@Transactional
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
 		return repo.save(obj);
@@ -40,13 +43,18 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 	
 	@Override
+	@Transactional
 	public Categoria update(Categoria obj) {
+		if (obj.getId() == obj.getParent().getId()) {
+			throw new ViolacaoIntegridadeException("Categoria não pode pertencer a si mesma.");
+		}
 		Categoria newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
 	
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		find(id);
 		repo.deleteById(id);

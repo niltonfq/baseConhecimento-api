@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +27,9 @@ public class Categoria implements Serializable{
 	private Long id;
 	private String nome;
 	private Categoria parent;
+	
+	@SuppressWarnings("unused")
+	private Long pai;
 	private List<Categoria> subs = new ArrayList<>();
 	private List<TopicoCategoria> topicoCategoriaList = new ArrayList<>();
 	private Date dataCriacao;
@@ -108,6 +112,19 @@ public class Categoria implements Serializable{
 		this.dataAtualizacao = dataAtualizacao;
 	}
 	
+	@Transient
+	public Long getPai() {
+		if (parent != null) {
+			return parent.getId();
+		} else {
+			return null;
+		}
+	}
+
+	public void setPai(Long pai) {
+		this.pai = pai;
+	}
+
 	@PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();
