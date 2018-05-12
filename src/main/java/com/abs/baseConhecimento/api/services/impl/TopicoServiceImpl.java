@@ -1,12 +1,17 @@
 	package com.abs.baseConhecimento.api.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
+import com.abs.baseConhecimento.api.entities.TopicoCategoria;
+import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoRepository;
 import com.abs.baseConhecimento.api.services.TopicoService;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
@@ -19,6 +24,8 @@ public class TopicoServiceImpl implements TopicoService{
 
 	@Autowired
 	private TopicoRepository repo;
+	@Autowired
+	private TopicoCategoriaRepository topicoCategoriaRepository;
 
 	@Override
 	public Topico find(Long id) {
@@ -60,6 +67,17 @@ public class TopicoServiceImpl implements TopicoService{
 	public Topico fromDtoToTopico(TopicoDTO topicoDTO) {
 		if (topicoDTO == null) return null;
 		return new Topico(topicoDTO.getId(), topicoDTO.getNome());
+	}
+
+	@Override
+	public List<CategoriaDTO> findByIdTopico(Long idTopico) {
+		Optional<Topico> top = repo.findById(idTopico);
+		List<TopicoCategoria> list = topicoCategoriaRepository.findByIdTopico(top.get());
+		List<CategoriaDTO> listDto = list.stream().map(obj -> 
+				new CategoriaDTO(obj.getId().getCategoria().getId(), obj.getId().getCategoria().getNome()))
+				.collect(Collectors.toList());
+		
+		return listDto;
 	}
 	
 }

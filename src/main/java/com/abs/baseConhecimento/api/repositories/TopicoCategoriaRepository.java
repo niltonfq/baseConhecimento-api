@@ -11,5 +11,7 @@ import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 public interface TopicoCategoriaRepository extends JpaRepository<TopicoCategoria, Long> {
 
 	List<TopicoCategoria> findByIdCategoria(Categoria categoria);
+	List<TopicoCategoria> findByIdTopico(Topico topico);
 	TopicoCategoria findByIdCategoriaAndIdTopico(Categoria categoria, Topico topico);
+	
 }
