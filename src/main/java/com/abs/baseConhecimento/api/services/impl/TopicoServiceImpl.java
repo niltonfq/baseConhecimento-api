@@ -1,4 +1,4 @@
-	package com.abs.baseConhecimento.api.services.impl;
+package com.abs.baseConhecimento.api.services.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
+import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.entities.Topico;
 import com.abs.baseConhecimento.api.entities.TopicoCategoria;
+import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoRepository;
 import com.abs.baseConhecimento.api.services.TopicoService;
@@ -26,6 +28,8 @@ public class TopicoServiceImpl implements TopicoService{
 	private TopicoRepository repo;
 	@Autowired
 	private TopicoCategoriaRepository topicoCategoriaRepository;
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
 	@Override
 	public Topico find(Long id) {
@@ -79,5 +83,15 @@ public class TopicoServiceImpl implements TopicoService{
 		
 		return listDto;
 	}
+
+	@Override
+	public void deleteTopicoCategoria(Long idTopico, Long idCategoria) {
+		Optional<Topico> topico = repo.findById(idTopico);
+		Optional<Categoria> categoria = categoriaRepository.findById(idCategoria);
+		TopicoCategoria obj = new TopicoCategoria(topico.get(), categoria.get());
+		topicoCategoriaRepository.delete(obj);
+	}
+
 	
 }
+

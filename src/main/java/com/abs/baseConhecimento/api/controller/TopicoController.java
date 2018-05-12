@@ -45,6 +45,21 @@ public class TopicoController {
 	}
 	
 	/**
+	 * Remove um topico por ID.
+	 * 
+	 * @param id
+	 * @return ResponseEntity<Void>
+	 */
+	@DeleteMapping(value = "/{idTopico}/categorias/{idCategoria}")
+	public ResponseEntity<Void> deleteTopicoCategoria(
+			@PathVariable("idTopico") Long idTopico,
+			@PathVariable("idCategoria") Long idCategoria
+			) {
+		service.deleteTopicoCategoria(idTopico, idCategoria);
+		return ResponseEntity.noContent().build();
+	}
+	
+	/**
 	 * Atualizar os dados de uma topico.
 	 * 
 	 * @param id

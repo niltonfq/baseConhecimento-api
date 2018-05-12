@@ -17,4 +17,5 @@ public interface TopicoService {
 	Topico fromDtoToTopico(TopicoDTO topicoDTO);
 	
 	List<CategoriaDTO> findByIdTopico(Long idTopico);
+	void deleteTopicoCategoria(Long idTopico, Long idCategoria);
 }
