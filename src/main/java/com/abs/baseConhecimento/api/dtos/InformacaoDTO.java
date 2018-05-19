@@ -8,6 +8,7 @@ public class InformacaoDTO implements Serializable{
 	private Long id;
 	private String descricao;
 	private TopicoDTO topico;
+	private Long categoriaId;
 	
 	public InformacaoDTO() {
 	}
@@ -19,6 +20,14 @@ public class InformacaoDTO implements Serializable{
 
 	public Long getId() {
 		return id;
+	}
+
+	public Long getCategoriaId() {
+		return categoriaId;
+	}
+
+	public void setCategoriaId(Long categoriaId) {
+		this.categoriaId = categoriaId;
 	}
 
 	public void setId(Long id) {

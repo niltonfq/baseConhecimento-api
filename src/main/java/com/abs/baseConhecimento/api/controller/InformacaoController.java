@@ -22,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.abs.baseConhecimento.api.dtos.InformacaoDTO;
+import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.entities.Informacao;
+import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 import com.abs.baseConhecimento.api.response.Response;
+import com.abs.baseConhecimento.api.services.CategoriaService;
 import com.abs.baseConhecimento.api.services.InformacaoService;
+import com.abs.baseConhecimento.api.services.TopicoCategoriaService;
+import com.abs.baseConhecimento.api.services.TopicoService;
 
 
 @RestController
@@ -34,6 +39,12 @@ public class InformacaoController {
 
 	@Autowired
 	private InformacaoService service;
+	@Autowired
+	private TopicoService topicoService;
+	@Autowired
+	private CategoriaService categoriaService;
+	@Autowired
+	private TopicoCategoriaService topicoCategoriaService;
 	
 	private static final Logger log = LoggerFactory.getLogger(InformacaoController.class);
 	
@@ -62,6 +73,7 @@ public class InformacaoController {
 			@Valid @RequestBody InformacaoDTO objDto) {
 		Informacao obj = service.fromDtoToInformacao(objDto);
 		obj.setId(id);
+		topicoService.update(obj.getTopico());
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
@@ -76,7 +88,14 @@ public class InformacaoController {
 	public ResponseEntity<ResponseEntity<Void>> insert(@Valid @RequestBody InformacaoDTO objDto) {
 		
 		Informacao obj = service.fromDtoToInformacao(objDto);
+		Categoria cat = categoriaService.find(objDto.getCategoriaId());
+		
+		topicoService.insert(obj.getTopico());
 		obj = service.insert(obj);
+		
+		TopicoCategoria topicoCategoria = new TopicoCategoria(obj.getTopico(), cat);
+		topicoCategoriaService.insert(topicoCategoria);
+		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
