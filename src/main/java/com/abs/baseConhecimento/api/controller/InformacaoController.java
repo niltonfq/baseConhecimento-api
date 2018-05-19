@@ -57,7 +57,8 @@ public class InformacaoController {
 	 * @return ResponseEntity<Void>
 	 */
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> update(@PathVariable("id") Long id,
+	public ResponseEntity<Void> update(
+			@PathVariable("id") Long id,
 			@Valid @RequestBody InformacaoDTO objDto) {
 		Informacao obj = service.fromDtoToInformacao(objDto);
 		obj.setId(id);
