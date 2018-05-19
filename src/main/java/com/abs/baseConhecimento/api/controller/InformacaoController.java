@@ -70,10 +70,10 @@ public class InformacaoController {
 	 * Adiciona uma informação.
 	 * 
 	 * @param InformacaoDTO
-	 * @return ResponseEntity<Response<Informacao>>
+	 * @return ResponseEntity<ResponseEntity<Void>>
 	 */
 	@PostMapping
-	public ResponseEntity<Response<Informacao>> insert(@Valid @RequestBody InformacaoDTO objDto) {
+	public ResponseEntity<ResponseEntity<Void>> insert(@Valid @RequestBody InformacaoDTO objDto) {
 		
 		Informacao obj = service.fromDtoToInformacao(objDto);
 		obj = service.insert(obj);

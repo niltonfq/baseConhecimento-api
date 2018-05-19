@@ -16,4 +16,5 @@ public interface InformacaoService {
 	
 	InformacaoDTO fromInformacaoToDto(Informacao obj);
 	Informacao fromDtoToInformacao(InformacaoDTO dto);
+
 }

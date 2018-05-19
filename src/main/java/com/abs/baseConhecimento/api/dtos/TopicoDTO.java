@@ -7,16 +7,24 @@ public class TopicoDTO implements Serializable{
 
 	private Long id;
 	private String nome;
+	private Long pai;
 	
 	public TopicoDTO() {
 	}
 	
-	public TopicoDTO(Long id, String nome) {
+	public TopicoDTO(Long id, String nome, Long pai) {
 		this.id = id;
 		this.nome = nome;
+		this.pai = pai;
 	}
 
+	public Long getPai() {
+		return pai;
+	}
 
+	public void setPai(Long pai) {
+		this.pai = pai;
+	}
 
 	public Long getId() {
 		return id;

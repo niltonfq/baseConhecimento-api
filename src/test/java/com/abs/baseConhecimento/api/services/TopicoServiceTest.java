@@ -49,7 +49,7 @@ public class TopicoServiceTest {
 	}
 
 	private TopicoDTO umTopicoDto() {
-		return new TopicoDTO(1L, "xuxa");
+		return new TopicoDTO(1L, "xuxa", null);
 	}
 
 	

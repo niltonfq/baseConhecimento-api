@@ -12,7 +12,6 @@ import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
-import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeException;
@@ -25,8 +24,6 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Autowired
 	private CategoriaRepository repo;
-	@Autowired
-	private TopicoCategoriaRepository topicoCategoriaRepository;
 
 	@Override
 	@Transactional
@@ -67,20 +64,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Override
 	public List<Categoria> listar() {
-		List<Categoria> lista = repo.findByParentIsNull();
-		for (Categoria categoria : lista) {
-			carregaSubs(categoria);
-		}
-		return lista;
-	}
-
-	private void carregaSubs(Categoria pai) {
-		
-		pai.setSubs(repo.findByParent(pai));
-		pai.setTopicoCategoriaList(topicoCategoriaRepository.findByIdCategoria(pai));
-		for (Categoria filho : pai.getSubs()) {
-			carregaSubs(filho);
-		}
+		return repo.findByParentIsNull();
 	}
 	
 	@Override
@@ -91,12 +75,13 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return dto;
 	}
 	
-
 	private void adicionarTopicos(CategoriaDTO dto, List<TopicoCategoria> topicoCategoriaList) {
 		
 		for (TopicoCategoria topicoCategoria : topicoCategoriaList) {
-			TopicoDTO obj = new TopicoDTO(topicoCategoria.getId().getTopico().getId(), 
-					topicoCategoria.getId().getTopico().getNome());
+			TopicoDTO obj = new TopicoDTO(
+					topicoCategoria.getId().getTopico().getId(), 
+					topicoCategoria.getId().getTopico().getNome(), 
+					topicoCategoria.getId().getCategoria().getId());
 			dto.getTopicos().add(obj);
 		}
 		
@@ -110,7 +95,6 @@ public class CategoriaServiceImpl implements CategoriaService{
 			dto.getItens().add(obj);
 		}
 	}
-	
 	
 	@Override
 	public Categoria fromDtoToCategoria(CategoriaDTO dto) {

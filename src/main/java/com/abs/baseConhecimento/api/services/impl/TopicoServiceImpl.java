@@ -64,7 +64,7 @@ public class TopicoServiceImpl implements TopicoService{
 	@Override
 	public TopicoDTO fromTopicoToDto(Topico topico) {
 		if (topico == null) return null;
-		return new TopicoDTO(topico.getId(), topico.getNome());
+		return new TopicoDTO(topico.getId(), topico.getNome(), null);
 	}
 
 	@Override
