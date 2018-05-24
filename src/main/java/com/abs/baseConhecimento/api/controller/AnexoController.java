@@ -1,6 +1,11 @@
 package com.abs.baseConhecimento.api.controller;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -15,11 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.abs.baseConhecimento.api.controller.exceptions.FileNotFoundException;
 import com.abs.baseConhecimento.api.entities.Anexo;
+import com.abs.baseConhecimento.api.entities.Topico;
 import com.abs.baseConhecimento.api.services.AnexoService;
+import com.abs.baseConhecimento.api.services.TopicoService;
 
 @RestController
 @RequestMapping("/api/anexos")
@@ -27,9 +37,13 @@ import com.abs.baseConhecimento.api.services.AnexoService;
 public class AnexoController {
 
 //	private static final Logger log = LoggerFactory.getLogger(AnexoController.class);
+	private static final String CAMINHO_ARQUIVOS = "/Users/nilton/Documents/projetos/www/baseConhecimento/anexos/";
 	
 	@Autowired
 	private AnexoService service;
+	@Autowired
+	private TopicoService topicoService;
+	
 	
 	/**
 	 * Remove um anexo por ID.
@@ -78,9 +92,40 @@ public class AnexoController {
 	 * @param result
 	 * @return ResponseEntity<Void>
 	 */
-	@PostMapping
-	public ResponseEntity<Void> insert(@Valid @RequestBody Anexo obj) {
-		obj = service.insert(obj);
+	@PostMapping(value = "/topico/{id}")
+	public ResponseEntity<Void> insert(
+			@RequestParam("file") MultipartFile file,
+			@PathVariable("id") Long id) {
+		
+		if (file.isEmpty()) {
+			throw new FileNotFoundException("Informe o arquivo para upload.");
+        }
+
+		Long unico = (new Date()).getTime();
+		
+		String caminho = CAMINHO_ARQUIVOS + unico;
+		if (file.getContentType().equals("application/pdf")) {
+			caminho += ".pdf";
+        } else if (file.getContentType().equals("image/jpeg")) {
+        	caminho += ".jpeg";
+        } else {
+        	throw new FileNotFoundException("Tipo de arquivo inválido.");
+        }
+		
+		try {
+			
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(caminho);
+            Files.write(path, bytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+        Topico topico = topicoService.find(id);
+        Anexo obj = new Anexo(null, file.getOriginalFilename(), caminho, topico);
+		obj = service.insert(obj);		
+		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();

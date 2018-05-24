@@ -17,6 +17,16 @@ import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeExcep
 public class ControllerExceptionHandler {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<Response<Object>> fileNotFound(FileNotFoundException e, HttpServletRequest request) {
+		
+		Response err = new Response<Object>();
+		err.getErrors().add(e.getMessage());
+				
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Response<Object>> entityNotFound(EntityNotFoundException e, HttpServletRequest request) {
 		

@@ -1,5 +1,6 @@
 	package com.abs.baseConhecimento.api.services.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,14 @@ public class AnexoServiceImpl implements AnexoService{
 	
 	@Override
 	public void delete(Long id) {
-		find(id);
+		Anexo obj = find(id);
+			
+		File file = new File(obj.getCaminho());
+    	
+		if(!file.delete()){
+			throw new ObjectNotFoundException("Objeto não encontrado ou sem acesso para excluí-lo");
+		}
+    	 
 		repo.deleteById(id);
 	}
 
