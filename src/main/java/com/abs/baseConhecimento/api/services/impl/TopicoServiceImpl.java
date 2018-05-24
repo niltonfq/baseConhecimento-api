@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
+import com.abs.baseConhecimento.api.dtos.TopicoCategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.entities.Topico;
@@ -17,6 +18,7 @@ import com.abs.baseConhecimento.api.repositories.TopicoCategoriaRepository;
 import com.abs.baseConhecimento.api.repositories.TopicoRepository;
 import com.abs.baseConhecimento.api.services.TopicoService;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
+import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeException;
 
 
 @Service
@@ -88,8 +90,24 @@ public class TopicoServiceImpl implements TopicoService{
 	public void deleteTopicoCategoria(Long idTopico, Long idCategoria) {
 		Optional<Topico> topico = repo.findById(idTopico);
 		Optional<Categoria> categoria = categoriaRepository.findById(idCategoria);
+
+		List<TopicoCategoria> list = topicoCategoriaRepository.findByIdTopico(topico.get());
+		
+		if (list.size() == 1) {
+			throw new ViolacaoIntegridadeException("Tópico deve possuir pelo menos 1 categoria");
+		}
+		
 		TopicoCategoria obj = new TopicoCategoria(topico.get(), categoria.get());
 		topicoCategoriaRepository.delete(obj);
+	}
+
+	@Override
+	public TopicoCategoria insertTopicoCategoria(TopicoCategoriaDTO obj) {
+		Optional<Topico> topico = repo.findById(obj.getTopico().getId());
+		Optional<Categoria> categoria = categoriaRepository.findById(obj.getCategoria().getId());
+		
+		TopicoCategoria topicoCategoria = new TopicoCategoria(topico.get(), categoria.get());
+		return topicoCategoriaRepository.save(topicoCategoria);
 	}
 
 	

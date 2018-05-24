@@ -13,6 +13,7 @@ import com.abs.baseConhecimento.api.entities.Categoria;
 import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 import com.abs.baseConhecimento.api.repositories.CategoriaRepository;
 import com.abs.baseConhecimento.api.services.CategoriaService;
+import com.abs.baseConhecimento.api.services.TopicoCategoriaService;
 import com.abs.baseConhecimento.api.services.exceptions.ObjectNotFoundException;
 import com.abs.baseConhecimento.api.services.exceptions.ViolacaoIntegridadeException;
 
@@ -24,6 +25,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Autowired
 	private CategoriaRepository repo;
+	@Autowired
+	private TopicoCategoriaService topicoCategoriaService;
 
 	@Override
 	@Transactional
@@ -64,14 +67,14 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Override
 	public List<Categoria> listar() {
-		return repo.findByParentIsNull();
+		return repo.findByParentIsNullOrderByNome();
 	}
 	
 	@Override
 	public CategoriaDTO fromCategoriaToDtoComSubsComTopicos(Categoria obj) {
 		CategoriaDTO dto = fromCategoriaToDto(obj);
-		adicionarTopicos(dto, obj.getTopicoCategoriaList());
-		adicionarItens(dto, obj.getSubs());
+		adicionarTopicos(dto, topicoCategoriaService.topicosCategoria(obj) );
+		adicionarItens(dto, repo.findByParentOrderByNome(obj));
 		return dto;
 	}
 	
@@ -90,7 +93,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private void adicionarItens(CategoriaDTO dto, List<Categoria> lista) {
 		for (Categoria categoria : lista) {
 			CategoriaDTO obj = fromCategoriaToDto(categoria);
-			adicionarItens(obj, categoria.getSubs());
+			adicionarItens(obj, repo.findByParentOrderByNome(categoria));
 			adicionarTopicos(obj, categoria.getTopicoCategoriaList());
 			dto.getItens().add(obj);
 		}

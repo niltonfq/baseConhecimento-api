@@ -6,4 +6,5 @@ import com.abs.baseConhecimento.api.entities.Topico;
 
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
 
+	
 }

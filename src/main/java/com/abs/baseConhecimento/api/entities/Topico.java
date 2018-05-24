@@ -52,6 +52,9 @@ public class Topico implements Serializable{
 	}
 
 	public void setNome(String descricao) {
+		if (descricao != null) {
+			descricao = descricao.toLowerCase();
+		}
 		this.nome = descricao;
 	}
 

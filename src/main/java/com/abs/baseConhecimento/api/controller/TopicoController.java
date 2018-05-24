@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
+import com.abs.baseConhecimento.api.dtos.TopicoCategoriaDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
 import com.abs.baseConhecimento.api.services.TopicoService;
 
@@ -31,6 +32,20 @@ public class TopicoController {
 	
 	@Autowired
 	private TopicoService service;
+	
+	/**
+	 * Adicionar um topicoCategoria.
+	 * 
+	 * @param TopicoCategoriaDto
+	 * @return ResponseEntity<Void>
+	 */
+	@PostMapping(value = "/categoria")
+	public ResponseEntity<Void> insertTopicoCategoria(@Valid @RequestBody TopicoCategoriaDTO obj) {
+		
+		service.insertTopicoCategoria(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
 	
 	/**
 	 * Remove um topico por ID.
@@ -91,7 +106,6 @@ public class TopicoController {
 	 * Adicionar um topico.
 	 * 
 	 * @param Topico
-	 * @param result
 	 * @return ResponseEntity<Void>
 	 */
 	@PostMapping

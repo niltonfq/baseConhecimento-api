@@ -3,8 +3,10 @@ package com.abs.baseConhecimento.api.services;
 import java.util.List;
 
 import com.abs.baseConhecimento.api.dtos.CategoriaDTO;
+import com.abs.baseConhecimento.api.dtos.TopicoCategoriaDTO;
 import com.abs.baseConhecimento.api.dtos.TopicoDTO;
 import com.abs.baseConhecimento.api.entities.Topico;
+import com.abs.baseConhecimento.api.entities.TopicoCategoria;
 
 public interface TopicoService {
 
@@ -18,4 +20,6 @@ public interface TopicoService {
 	
 	List<CategoriaDTO> findByIdTopico(Long idTopico);
 	void deleteTopicoCategoria(Long idTopico, Long idCategoria);
+	
+	TopicoCategoria insertTopicoCategoria(TopicoCategoriaDTO obj);
 }
